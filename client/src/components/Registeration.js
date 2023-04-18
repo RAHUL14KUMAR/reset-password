@@ -8,6 +8,7 @@ function Registeration() {
   const [email,setEmail]=useState("");
   const [phone,setPhone]=useState("");
   const [password,setPassword]=useState("");
+  const [files,setFile]=useState()
 
   const [errField,setErrField]=useState({
     nameErr:'',
@@ -17,20 +18,34 @@ function Registeration() {
   })
   const navigate=useNavigate();
 
+  const imageUpload=(e)=>{
+    // console.log(e.target.files[0]);
+    setFile(e.target.files[0]);
+  }
+  console.log(files);
+
   const submit=async()=>{
     if(true){
       let url="http://localhost:3000/upload/add"
-      let options={
-        method:'POST',
-        url:url,
-        headers:{
+      const formData=new FormData();
+      formData.append('files',files,files.name)
+      formData.append('name',name)
+      formData.append('email',email)
+      formData.append('phone',phone)
+      formData.append('password',password)
+      // let options={
+      //   method:'POST',
+      //   url:url,
+      //   headers:{
 
-        },
-        data:{name,email,phone,password}
-      }
-      console.log(options);
+      //   },
+      //   data:{name,email,phone,password}
+      // }
+      // console.log(options);
       try{
-        let res=await axios(options)
+        // let res=await axios(options)
+        console.log(formData);
+        let res=await axios.post(url,formData)
         console.log(res);
         if(res.status===200){
           // console.log("added")
@@ -42,9 +57,11 @@ function Registeration() {
       }catch(err){
         toast.error("something went wrong");
       }
+      
     }else{
       toast.error("invalid");
     }
+    console.log("==",files,"====",files.name);
   }
   const nav=()=>{
     navigate('/login');
@@ -92,6 +109,12 @@ function Registeration() {
           <label htmlfor="inputPasswo" className="col-sm-2 col-form-label">Password</label>
           <div className="col-sm-10">
             <input type="password" className="form-control" id="inputPasswo" value={password} onChange={(e)=>setPassword(e.target.value)} />
+          </div>
+        </div>
+        <div className="mb-3 row">
+          <label htmlfor="inputPass" className="col-sm-2 col-form-label">Upload Profile</label>
+          <div className="col-sm-10">
+            <input type="file"className="form-control" id="inputPass" name="files"onChange={imageUpload} />
           </div>
         </div>
         <button type="button" className="offset-4 btn btn-primary" onClick={submit}>add</button>

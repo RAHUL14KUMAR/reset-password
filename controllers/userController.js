@@ -22,6 +22,9 @@ const userList=async(req,res)=>{
     // res.status(200).json(data)
 }
 const userAdd=async(req,res)=>{
+
+    console.log(req.file)
+    const profile=(req.file)?req.file.filename:null;
     const{name,email,phone,password}=req.body;
     if (!name || !email || !password||!phone) {
         res.status(400);
@@ -44,6 +47,7 @@ const userAdd=async(req,res)=>{
         email:email,
         phone:phone,
         password:hashpass,
+        profile:profile,
         token:tokenValue
     });
     res.status(200).json({
@@ -57,19 +61,18 @@ const userAdd=async(req,res)=>{
 const userLogin=async(req,res)=>{
     try{
         const{email,password}=req.body;
-        if ( !email || !password) {
+        if (!email || !password) {
             res.status(301).json({message:"enter all the details"});
         }
-        const login=await user.findOne({email});
+        const login=await user.findOne({email:email});
         if(login){
-            var match=await bcrypt.compare(password,login.password)
-            if(match){
                 res.status(200).json({message:"login successfully",data:login})
-            }else{
-                res.status(301).json({message:"error",data:"invalid password"})
-            }
+            // }else{
+            //     // res.status(301).json({message:"error",data:"invalid password"})
+            // }
         }else{
             res.status(301).json({message:"error",data:"invalid email id"})
+            // console.log(error);
         }
     }catch(error){
         console.log(error);
@@ -97,17 +100,17 @@ const emailSend=async(req,res)=>{
 }
 const changePassword=async(req,res)=>{
     try{
-        let data=await otp.find({email:req.body.email,code:req.body.code});
+        let data=await otp.find({email:req.body.email.email,code:req.body.code});
         if(data){
             let currentTime=new Date().getTime();
             let diff=data.expireIn-currentTime;
             if(diff<0){
                 res.status(500).json({message:"token expired"})
             }else{
-                let users=await user.findOne({email:req.body.email})
+                let users=await user.findOne({email:req.body.email.email})
                 users.password=req.body.password;
                 users.save();
-                res.status(200).josn({message:"passowrd change"})
+                res.status(200).json({message:"passowrd change"})
             }
         }else{
             res.status(401).json({messsage:"error invalid otp"});

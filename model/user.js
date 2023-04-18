@@ -9,10 +9,13 @@ const LoginSchema=new schema({
         type:String
     },
     phone:{
-        type:String
+        type:Number
     },
     password:{
         type:String
+    },
+    profile:{
+        type:String,required:true
     },
     token:{
         type:Array

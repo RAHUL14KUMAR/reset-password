@@ -6,6 +6,17 @@ require('../config/passport')(passport)
 const user=require('../model/user')
 // const jwt=require('jsonwebtoken');
 
+var multer=require('multer')
+var storage=multer.diskStorage({
+    destination:function(req,file,cb){
+        cb(null,'./public/images')
+    },
+    filename:function(req,file,cb){
+        cb(null,Date.now()+'_'+file.originalname)
+    }
+})
+var upload=multer({storage:storage});
+
 const jwt=require('jsonwebtoken');
 var jwtAuth=async(req,res,next)=>{
     var token=req.headers.authorization;
@@ -35,7 +46,7 @@ router.route('/list')
 // .get(jwtAuth,userController.userList);
 
 router.route('/add')
-.post(userController.userAdd)
+.post(upload.single('files'),userController.userAdd)
 
 router.route('/login')
 .post(userController.userLogin)
