@@ -1,31 +1,21 @@
 const mongoose=require('mongoose');
 const schema=mongoose.Schema;
-const tokenSchema=new schema({
-    token:{
-        type:String,
-        required:true
-    }
-})
+
 const LoginSchema=new schema({
     name:{
-        type:String,
-        // required:true
+        type:String
     },
     email:{
-        type:String,
-        // required:true
+        type:String
     },
     phone:{
-        type:String,
-        // required:true
+        type:String
     },
     password:{
-        type:String,
-        // required:true
+        type:String
     },
     token:{
-        type:Array,
-        // required:true
+        type:Array
     },
     
 },{

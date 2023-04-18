@@ -1,6 +1,7 @@
 const user=require('../model/user');
 const bcrypt=require('bcryptjs');
 const jwt=require('jsonwebtoken');
+const otp=require('../model/otp');
 
 const generateJwt = (id) => {
     return jwt.sign({id} , process.env.JWT_SECRET, { expiresIn: "30m" });
@@ -74,6 +75,77 @@ const userLogin=async(req,res)=>{
         console.log(error);
     }
 }
+const emailSend=async(req,res)=>{
+    try{
+        // const {email}=req.body;
+        const data=await user.findOne({email:req.body.email});
+        if(data){
+            let otpcode=Math.floor((Math.random()*10000)+1);
+            await otp.create({
+                email:req.body.email,
+                code:otpcode,
+                expireIn:new Date().getTime()+300*1000
+            })
+            res.status(200).json({message:"check your email id"});
+        }else{
+            res.status(401).json({message:"emailId not exists"});
+        }
+    }catch(err){
+        res.status(500).json({err:"we caught error from emailSend Routes"});
+        // console.log(err);
+    }
+}
+const changePassword=async(req,res)=>{
+    try{
+        let data=await otp.find({email:req.body.email,code:req.body.code});
+        if(data){
+            let currentTime=new Date().getTime();
+            let diff=data.expireIn-currentTime;
+            if(diff<0){
+                res.status(500).json({message:"token expired"})
+            }else{
+                let users=await user.findOne({email:req.body.email})
+                users.password=req.body.password;
+                users.save();
+                res.status(200).josn({message:"passowrd change"})
+            }
+        }else{
+            res.status(401).json({messsage:"error invalid otp"});
+        }
+    }catch(err){
+        res.status(500).json({err:"we caught error from changePassword Routes"});
+    }
+
+}
+
+const mailer=(email,otp)=>{
+
+    var nodeMailer=require('nodemailer');
+    var transporter=nodeMailer.createTransport({
+        service:'gmail',
+        port:587,
+        secure:false,
+        auth:{
+            user:'APNA EMAIL ID',
+            pass:'USS EMAIL ID KA PASSWORD'
+        }
+    });
+
+    var mailOptions={
+        from:'agrawal.r1412@gmail.com',
+        to:'ram@gmail.com',
+        subject:'sending email using node js',
+        text:'thank u sir!'
+    }
+
+    transporter.sendMail(mailOptions,function(error,info){
+        if(error){
+            console.log(error);
+        }else{
+            console.log('email sent: ',info.response);
+        }
+    })
+}
 module.exports={
-    userList,userAdd,userLogin
+    userList,userAdd,userLogin,emailSend,changePassword
 }

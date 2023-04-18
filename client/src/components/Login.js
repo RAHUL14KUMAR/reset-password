@@ -43,6 +43,9 @@ function Login() {
       toast.error('invalid');
     }
   }
+  const link=()=>{
+    navigate('/reset')
+  }
   console.log(password);
   return (
     <div>
@@ -58,6 +61,7 @@ function Login() {
     <div class="col-sm-10">
       <input type="password" class="form-control" id="inputPasswo" value={password} onChange={(e)=>setPassword(e.target.value)} />
     </div>
+    <a link='' onClick={link} href='#'>forget password</a>
   </div>
   <button type="button" class="offset-4 btn btn-primary" onClick={nav}>add</button>
   <button type="button" class="offset-4 btn btn-primary" onClick={login} >login</button>

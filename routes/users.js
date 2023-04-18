@@ -39,4 +39,12 @@ router.route('/add')
 
 router.route('/login')
 .post(userController.userLogin)
+
+
+router.route('/emailsend')
+.post(userController.emailSend);
+
+router.route('/changepassword')
+.post(userController.changePassword)
+
 module.exports=router;
