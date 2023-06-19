@@ -9,14 +9,15 @@ const cors=require('cors');
 
 require('dotenv').config();
 
-const port=3000;
+const port=3002;
 const app=express();
 app.use(cors());
 app.use(express.json());
 app.use(passport.initialize());
-// app.use(morgan('dev'));
 
-// app.use(express.static(__dirname+'/view'));
+
+app.use(express.static(__dirname+'/public')); 
+app.use('/images/:string', express.static(__dirname+'/public/images/'));
 
 app.get('/',(req,res)=>{
     res.send("hello");

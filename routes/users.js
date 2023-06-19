@@ -1,10 +1,10 @@
 const express=require('express');
 const router=express.Router();
-const userController=require('../controllers/userController');
+const {userList,userAdd,userLogin,emailSend,changePassword}=require('../controllers/userController');
 const passport=require('passport');
 require('../config/passport')(passport)
 const user=require('../model/user')
-// const jwt=require('jsonwebtoken');
+
 
 var multer=require('multer')
 var storage=multer.diskStorage({
@@ -37,7 +37,7 @@ var jwtAuth=async(req,res,next)=>{
     // });
 }
 router.route('/list')
-.get(jwtAuth,userController.userList);
+.get(jwtAuth,userList);
 
 // router.route('/list')
 // .get(passport.authenticate('jwt',{session:false}),userController.userList);
@@ -46,16 +46,16 @@ router.route('/list')
 // .get(jwtAuth,userController.userList);
 
 router.route('/add')
-.post(upload.single('files'),userController.userAdd)
+.post(upload.single('files'),userAdd)
 
 router.route('/login')
-.post(userController.userLogin)
+.post(userLogin)
 
 
 router.route('/emailsend')
-.post(userController.emailSend);
+.post(emailSend);
 
 router.route('/changepassword')
-.post(userController.changePassword)
+.post(changePassword)
 
 module.exports=router;

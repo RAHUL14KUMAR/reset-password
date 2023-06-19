@@ -12,7 +12,7 @@ function PasswordForm(props) {
     const navigate=useNavigate();
     const login=async()=>{
     if(true){
-      let url="http://localhost:3000/upload/changepassword"
+      let url="http://localhost:3002/upload/changepassword"
       let options={
         method:'POST',
         url:url,

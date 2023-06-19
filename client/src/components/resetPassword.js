@@ -14,7 +14,7 @@ function ResetPassword() {
     }
     const send=async()=>{
       if(true){
-        let url="http://localhost:3000/upload/emailsend"
+        let url="http://localhost:3002/upload/emailsend"
         let options={
           method:'POST',
           url:url,

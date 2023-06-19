@@ -14,17 +14,12 @@ function Login() {
   }
   const login=async()=>{
     if(true){
-      let url="http://localhost:3000/upload/login"
+      let url="http://localhost:3002/upload/login"
       let options={
-        method:'POST',
-        url:url,
-        headers:{
-
-        },
         data:{email,password}
       }
       try{
-        let res=await axios(options)
+        let res=await axios.post(url,options.data);
         console.log(res);
         console.log(res.data.data.token);
         if(res.status===200){

@@ -7,38 +7,39 @@ function Home() {
   const [info,setInfo]=useState({
     name:'',
     email:'',
-    phone:''
+    phone:'',
+    profile:''
   });
   useEffect(()=>{
     getData()
   },[])
   const getData=async()=>{
-    let url="http://localhost:3000/upload/list"
+    let url="http://localhost:3002/upload/list"
     let options={
-      method:'GET',
-      url:url,
       headers:{
         'Authorization':`Bearer ${localStorage.getItem('token')}`
       }
     }
     try{
-      let res=await axios(options)
+      let res=await axios.get(url,options)
       console.log(res);
-      console.log(res.data);
-      console.log(res.data.data)
-      console.log(res.data.data[0].name)
+      // console.log(res.data);
+      // console.log(res.data.data)
+      console.log("profile->"+res.data.data[0].profile)
       setInfo({
         name:res.data.data[0].name,
         email:res.data.data[0].email,
-        phone:res.data.data[0].phone
+        phone:res.data.data[0].phone,
+        profile:res.data.data[0].profile
       })
     }catch(err){
       navigate('/login');
     }
   }
   const logout=()=>{
-    localStorage.removeItem('token');
+    localStorage.clear();
     window.location.reload();
+    navigate('/login');
   }
   return (
     <div>
@@ -47,7 +48,7 @@ function Home() {
         <div classname='row login homepage'>
           <h3 classname='heading'>welcome</h3>
           <div class='col-md-7'>
-            <img src="https://th.bing.com/th/id/OIP.EK9ofoIEind_Lzkl93VVTQHaJw?w=186&h=246&c=7&r=0&o=5&dpr=1.3&pid=1.7" width='240' height='200'/>
+            <img src={info.profile?"http://localhost:3002/images/"+info.profile:""} width='240' height='200'/>
           </div>
           <div class='col-md-7'>
             <table classname='table'>

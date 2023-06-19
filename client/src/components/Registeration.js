@@ -26,7 +26,7 @@ function Registeration() {
 
   const submit=async()=>{
     if(true){
-      let url="http://localhost:3000/upload/add"
+      let url="http://localhost:3002/upload/add"
       const formData=new FormData();
       formData.append('files',files,files.name)
       formData.append('name',name)

@@ -12,6 +12,7 @@ const userList=async(req,res)=>{
     // console.log("this is the user",req.user);
     // const data=await user.find({});
     const data=req.user;
+    console.log(data);
     if(data){
         res.status(200).json({data:data});
     }
